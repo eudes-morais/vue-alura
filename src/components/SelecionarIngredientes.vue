@@ -1,12 +1,21 @@
 <script lang="ts">
 import { obterCategorias } from '@/http';
+import type ICategoria from '@/interfaces/ICategoria';
+import CardCategoria from './CardCategoria.vue';
 
 export default {
+  // Dentro do DATA as propriedades são reativas (estado)
   data() {
     return {
-      categorias: obterCategorias()
+      categorias: [] as ICategoria[]
     }
-  }
+  },
+  // Método de CICLO DE VIDA (created). Este método é executado após as propriedades de data()
+  // terem sido definidas, sendo assim possível acessá-las e modificá-las.
+  async created() {
+    this.categorias = await obterCategorias();
+  },
+  components: { CardCategoria }
 }
 </script>
 
@@ -18,7 +27,7 @@ export default {
     </p>
     <ul class="categorias">
       <li v-for="categoria in categorias" :key="categoria.nome">
-        {{ categoria.nome }}
+        <CardCategoria :categoria="categoria" />
       </li>
     </ul>
     <p class="paragrafo dica">
